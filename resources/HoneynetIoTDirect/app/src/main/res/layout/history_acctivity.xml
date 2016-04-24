@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        android:background="#27ffdc">
+        <TextView
+            android:id="@+id/txthistory"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:textSize="15sp" />
+        <TextView
+            android:id="@+id/txtdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:textColor="#ff0814"
+            android:textStyle="italic"/>
+
+    </TableLayout>
+
+</LinearLayout>
