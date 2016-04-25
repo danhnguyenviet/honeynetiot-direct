@@ -8,8 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+import com.example.tinhlethanh.honeynetiotdirect.Model.History;
+
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Tinh LE Thanh on 4/10/2016.
@@ -23,7 +24,10 @@ public class DatabaseHelper{
     /*Tên tabel và các column trong database*/
     public static final String TABLE_HISTORY = "tbhistory";
     public static final String COLUMN_ID = "id";
-    public static final String COLUMN_NOIDUNG = "history";
+    public static final String COLUMN_IP = "ip";
+    public static final String COLUMN_PORT = "port";
+    public static final String COLUMN_DEN = "den";
+    public static final String COLUMN_BOM = "bom";
     public static final String COLUMN_DATE = "datetime";
 
 
@@ -53,7 +57,10 @@ public class DatabaseHelper{
     public void doInsertRecord(History history)
     {
         ContentValues values=new ContentValues();
-        values.put(COLUMN_NOIDUNG, history.getHistory());
+        values.put(COLUMN_IP, history.getIp());
+        values.put(COLUMN_PORT, history.getPort());
+        values.put(COLUMN_DEN, history.getDen());
+        values.put(COLUMN_BOM, history.getBom());
         values.put(COLUMN_DATE, history.getDatetime());
         db.insert(TABLE_HISTORY, null, values);
     }
@@ -68,8 +75,11 @@ public class DatabaseHelper{
         {
             History history = new History();
             history.setId(Integer.parseInt(cursor.getString(0)));
-            history.setHistory(cursor.getString(1));
-            history.setDatetime(cursor.getString(2));
+            history.setIp(cursor.getString(1));
+            history.setPort(cursor.getString(2));
+            history.setDen(cursor.getString(3));
+            history.setBom(cursor.getString(4));
+            history.setDatetime(cursor.getString(5));
             historyList.add(history);
             cursor.moveToNext();
         }
@@ -98,7 +108,10 @@ public class DatabaseHelper{
         public void onCreate(SQLiteDatabase arg0) {
             arg0.execSQL("CREATE TABLE " + TABLE_HISTORY + " ("
                     + COLUMN_ID + " integer primary key autoincrement, "
-                    + COLUMN_NOIDUNG + " TEXT NOT NULL, "
+                    + COLUMN_IP + " TEXT NOT NULL, "
+                    + COLUMN_PORT + " TEXT NOT NULL, "
+                    + COLUMN_DEN + " TEXT, "
+                    + COLUMN_BOM + " TEXT, "
                     + COLUMN_DATE + " TEXT NOT NULL);");
 
         }

@@ -5,20 +5,33 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:stretchColumns="*"
-        android:background="#27ffdc">
-        <TextView
-            android:id="@+id/txthistory"
-            android:layout_height="match_parent"
-            android:layout_width="wrap_content"
-            android:textSize="15sp" />
+        android:stretchColumns="*">
         <TextView
             android:id="@+id/txtdate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="10sp"
+            android:text="thoigian"
             android:textColor="#ff0814"
             android:textStyle="italic"/>
+        <TextView
+            android:id="@+id/txtip"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:text="ip"
+            android:textSize="15sp" />
+        <TextView
+            android:id="@+id/txtport"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:text="port"
+            android:textSize="15sp" />
+        <TextView
+            android:id="@+id/txtden"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:textSize="15sp" />
+
 
     </TableLayout>
 
