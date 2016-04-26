@@ -2,6 +2,7 @@ package com.example.tinhlethanh.honeynetiotdirect;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +14,14 @@ import android.widget.Toast;
 
 import com.example.tinhlethanh.honeynetiotdirect.Model.History;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -101,5 +110,101 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Check the Internet connection. Return true if phone has connection.
+     * Retrun false if phone hasn't connection
+     * @return
+     */
+    private boolean checkInternetConenction() {
+        // get Connectivity Manager object to check connection
+        ConnectivityManager connec =(ConnectivityManager)getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
+
+        // Check for network connections
+        if ( connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTED ||
+
+                connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTING ||
+                connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTING ||
+                connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTED ) {
+            Toast.makeText(this, " Connected ", Toast.LENGTH_LONG).show();
+            return true;
+        }else if (
+                connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.DISCONNECTED ||
+                        connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.DISCONNECTED  ) {
+            Toast.makeText(this, " Not Connected ", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * Open a Http connection
+     * @param urlStr url string is used to open a Http connection
+     * @return
+     */
+    private InputStream openHttpConnection(String urlStr) {
+        InputStream in = null;
+        int resCode = -1;
+
+        try {
+            URL url = new URL(urlStr);
+            URLConnection urlConn = url.openConnection();
+
+            if (!(urlConn instanceof HttpURLConnection)) {
+                throw new IOException("URL is not an Http URL");
+            }
+            HttpURLConnection httpConn = (HttpURLConnection) urlConn;
+            httpConn.setAllowUserInteraction(false);
+            httpConn.setInstanceFollowRedirects(true);
+            httpConn.setRequestMethod("GET");
+            httpConn.connect();
+
+            resCode = httpConn.getResponseCode();
+
+            if (resCode == HttpURLConnection.HTTP_OK) {
+                in = httpConn.getInputStream();
+            }
+        }
+
+        catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return in;
+    }
+
+    /**
+     * Send a GET request to server
+     * @param urlStr url string is used to make GET request
+     */
+    private void sendGETRequest(String urlStr) {
+        final String url = urlStr;
+
+        new Thread() {
+            public void run() {
+                InputStream in = null;
+                try {
+                    in = openHttpConnection(url);
+                    if (!in.equals(null)) {
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+                        String line = "", content = "";
+                        while ((line = bufferedReader.readLine()) != null) {
+                            content += line;
+                        }
+
+                        if (content == "")
+                            System.out.println("Test 1 - null");
+                    }
+                    in.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }.start();
+
     }
 }
